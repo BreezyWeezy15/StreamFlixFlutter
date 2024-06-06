@@ -1,0 +1,10 @@
+
+
+CREATE TABLE movieHelper (
+    id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    postPath TEXT,
+    releaseDate TEXT,
+    rating TEXT,
+    movieID TEXT
+);
