@@ -17,8 +17,7 @@ class DatabaseController extends GetxController {
      databaseService.getAllMovies().then((value){
        if(value.isNotEmpty){
           data.value = value;
-       } else {
-          error.value = "No Fav Movies";
+          update();
        }
      });
    }

@@ -60,7 +60,7 @@ class _NowPlayingPageState extends State<NowPlayingPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(item.title!,style: getPoppingBold().copyWith(fontSize: 20),),
+                            Text(item.title!,style: getPoppingBold().copyWith(fontSize: 20),maxLines: 2,),
                             const SizedBox(height: 10,),
                             Row(children: [
                               Image.asset("assets/images/rating.png",width: 20,height: 20,),

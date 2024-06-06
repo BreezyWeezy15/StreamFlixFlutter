@@ -94,16 +94,17 @@ class _HomePageState extends State<HomePage> {
                child: Text("Now Showing",style: getPoppingBold().copyWith(fontSize: 25)),
              ),
              Obx((){
-                if(movieController.movieData.value != null){
+                var data = movieController.movieData.value;
+                if(data != null){
                   return Container(
                     height: 230,
                     margin: const EdgeInsets.all(10),
                     child: ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
-                      itemCount: movieController.movieData.value!.results!.length,
+                      itemCount: data.results?.length,
                       itemBuilder: (context,index){
-                        var e = movieController.movieData.value!.results![index];
+                        var e = data.results?[index];
                         return  SizedBox(
                           height: 180,
                           width: 150,
@@ -119,12 +120,12 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(16),
-                                    child: Image.network("http://image.tmdb.org/t/p/w500/${e.backdropPath!}",
+                                    child: Image.network("http://image.tmdb.org/t/p/w500/${e?.backdropPath!}",
                                       filterQuality: FilterQuality.high,fit: BoxFit.cover,height: 150,),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(5),
-                                    child: Text(e.title!,style: getPoppingBold().copyWith(fontSize: 18),maxLines: 1,
+                                    child: Text(e!.title!,style: getPoppingBold().copyWith(fontSize: 18),maxLines: 1,
                                       overflow: TextOverflow.ellipsis,),
                                   ),
                                   Padding(

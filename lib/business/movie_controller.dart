@@ -8,10 +8,10 @@ import 'package:movie_app/models/details/MovieDetails.dart';
 
 class MovieController extends GetxController {
     AuthService authService = AuthService();
-    Rx<MovieModel?> movieData = MovieModel().obs;
-    Rx<MovieDetails?> movieDetails = MovieDetails().obs;
-    Rx<CastModel?> castModel = CastModel().obs;
-    Rx<String?> error = null.obs;
+    var movieData = Rx<MovieModel?>(null);
+    var movieDetails = Rx<MovieDetails?>(null);
+    var castModel = Rx<CastModel?>(null);
+    var error = Rx<String?>(null);
 
     void getMovies(String category , String language , int page)  {
       authService.getMovies(category, language, page).then((value){

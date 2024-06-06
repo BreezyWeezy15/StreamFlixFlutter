@@ -33,17 +33,19 @@ class _DetailsPageState extends State<DetailsPage> {
     movieController = Get.find<MovieController>();
     databaseController = Get.find<DatabaseController>();
     results = Get.arguments;
-    ever(databaseController.data, (value){
-        for (var element in value) {
-          print("Results ${results.id} / ${element!.id}");
-          if(results.id == element?.id.toInt()){
+    ever(databaseController.data, (value) {
+      for (var element in value) {
+        if (results.id == element?.id.toInt()) {
+          if (mounted) {
             setState(() {
               iconPath = "assets/images/bookmark_filled.png";
             });
           }
         }
-    });
+      }
+        });
   }
+
   @override
   Widget build(BuildContext context) {
 
@@ -163,14 +165,15 @@ class _DetailsPageState extends State<DetailsPage> {
                 padding: const EdgeInsets.only(left: 30,right: 20,top: 20),
                 child: Obx((){
                   if(movieController.castModel.value != null){
+                    var data = movieController.castModel.value;
                     return SizedBox(
                       height: 150,
                       child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: movieController.castModel.value?.cast?.length,
+                        itemCount: data?.cast?.length,
                         itemBuilder: (context,index){
-                          var e = movieController.castModel.value?.cast?[index];
+                          var e = data?.cast?[index];
                           return  Padding(
                             padding: const EdgeInsets.only(right: 10),
                             child: SizedBox(
@@ -178,16 +181,20 @@ class _DetailsPageState extends State<DetailsPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ClipRRect(
+                                  e?.profilePath != null ? ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
                                     child: Image.network("http://image.tmdb.org/t/p/w500/${e?.profilePath!}",width: 100,height: 100,filterQuality: FilterQuality.high,
+                                      fit: BoxFit.cover,),
+                                  ) : ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Image.asset("assets/images/logo.png",width: 100,height: 100,filterQuality: FilterQuality.high,
                                       fit: BoxFit.cover,),
                                   ),
                                   const SizedBox(height: 5,),
                                   Text(e!.name!,style: getPoppingMedium().copyWith(fontSize: 15),
                                     maxLines: 2,overflow: TextOverflow.ellipsis,)
                                 ],
-                              ),
+                              )
                             ),
                           );
                         },
@@ -212,17 +219,19 @@ class _DetailsPageState extends State<DetailsPage> {
                 padding: const EdgeInsets.only(left: 30,right: 20,bottom: 20,top: 10),
                 child: Obx((){
                   if(movieController.movieDetails.value != null){
+                    var data = movieController.movieDetails.value;
                     return SizedBox(
                       height: 100,
                       child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: movieController.movieDetails.value?.productionCompanies!.length,
+                        itemCount: data?.productionCompanies!.length,
                         itemBuilder: (context,index){
-                          var e = movieController.movieDetails.value?.productionCompanies![index];
+                          var e = data?.productionCompanies?[index];
                           return  Padding(
                             padding: const EdgeInsets.only(left: 20,right: 20),
-                            child: Image.network("http://image.tmdb.org/t/p/w500/${e?.logoPath!}",width: 120,height: 120,filterQuality: FilterQuality.high,),
+                            child: e?.logoPath != null ? Image.network("http://image.tmdb.org/t/p/w500/${e?.logoPath}",width: 120,height: 120,filterQuality: FilterQuality.high,) :
+                             Container(),
                           );
                         },
                       ),

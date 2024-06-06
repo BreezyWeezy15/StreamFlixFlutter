@@ -22,7 +22,4 @@ class DatabaseService {
     return await database.deleteAllMovies();
   }
 
-  // Future<int> updateMovie(MovieHelperCompanion companion) async {
-  //   return await update(movieHelper).write(MovieHelperCompanion(id: companion.id,));
-  // }
 }

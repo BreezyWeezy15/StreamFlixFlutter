@@ -1,11 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:movie_app/business/database_controller.dart';
 import 'package:movie_app/fonts.dart';
 import 'package:movie_app/storage/storage_helper.dart';
-
-import '../utils.dart';
 
 class FavPage extends StatefulWidget {
   const FavPage({super.key});
@@ -16,15 +15,14 @@ class FavPage extends StatefulWidget {
 
 class _FavPageState extends State<FavPage> {
   late DatabaseController databaseController;
-
   @override
   void initState() {
     super.initState();
     databaseController  = Get.find<DatabaseController>();
-    databaseController.getAllMovies();
   }
   @override
   Widget build(BuildContext context) {
+    databaseController.getAllMovies();
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -46,7 +44,7 @@ class _FavPageState extends State<FavPage> {
                                 actions: [
                                   ElevatedButton(onPressed: () async {
                                     var results = await databaseController.deleteAllMovies();
-                                    if(results != -1){
+                                    if(results == -1){
                                       Fluttertoast.showToast(msg: "All Movies Successfully Deleted");
                                       databaseController.getAllMovies();
                                       Navigator.pop(context);
@@ -66,75 +64,76 @@ class _FavPageState extends State<FavPage> {
               ),
             ),
             Expanded(
-              child: Obx((){
-                if(databaseController.data.value.isNotEmpty){
-                  var e = databaseController.data.value;
-                  return SizedBox(
-                    height: 150,
-                    child: ListView.builder(
-                      itemCount: e.length,
-                      itemBuilder: (context,index){
-                        return Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: GestureDetector(
-                            onTap: (){
-                              //Get.toNamed("/details",arguments: e);
-                            },
-                            child: Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(16),
-                                  child: Image.network("http://image.tmdb.org/t/p/w500/${e[index]?.postPath!}",width: 120,height: 120,
-                                    fit: BoxFit.cover,filterQuality: FilterQuality.high,),
+              child: GetBuilder<DatabaseController>(
+                builder: (databaseController){
+                  if(databaseController.data.value.isNotEmpty){
+                    var e = databaseController.data.value;
+                    return SizedBox(
+                      height: 150,
+                      child: ListView.builder(
+                        itemCount: e.length,
+                        itemBuilder: (context,index){
+                          return Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: GestureDetector(
+                              onTap: (){
+                                //Get.toNamed("/details",arguments: e);
+                              },
+                              child: Dismissible(
+                                key: Key(UniqueKey().toString()),
+                                direction: DismissDirection.startToEnd,
+                                onDismissed: (direction) async {
+                                  if(direction == DismissDirection.startToEnd){
+                                    var result = await databaseController.deleteMovie(e[index]!.id);
+                                    if(result != -1){
+                                      Fluttertoast.showToast(msg: "Movie Successfully Removed");
+                                    }
+                                  }
+                                },
+                                confirmDismiss: (direction) async {
+                                  if(direction == DismissDirection.startToEnd){
+
+                                    return true;
+                                  }
+                                  return false;
+                                },
+                                child: Row(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Image.network("http://image.tmdb.org/t/p/w500/${e[index]?.postPath!}",width: 120,height: 120,
+                                        fit: BoxFit.cover,filterQuality: FilterQuality.high,),
+                                    ),
+                                    Expanded(child: Padding(
+                                      padding: const EdgeInsets.all(15),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(e[index]!.title!,style: getPoppingBold().copyWith(fontSize: 20),),
+                                          const SizedBox(height: 10,),
+                                          Row(children: [
+                                            Image.asset("assets/images/rating.png",width: 20,height: 20,),
+                                            const SizedBox(width: 10,),
+                                            Text(e[index]!.rating!,style: getPoppingMedium().copyWith(fontSize: 15),)
+                                          ],),
+                                        ],
+                                      ),
+                                    ))
+                                  ],
                                 ),
-                                Expanded(child: Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(e[index]!.title!,style: getPoppingBold().copyWith(fontSize: 20),),
-                                      const SizedBox(height: 10,),
-                                      Row(children: [
-                                        Image.asset("assets/images/rating.png",width: 20,height: 20,),
-                                        const SizedBox(width: 10,),
-                                        Text(e[index]!.rating!,style: getPoppingMedium().copyWith(fontSize: 15),)
-                                      ],),
-                                      // ListView.builder(
-                                      //   itemCount: item.genreIds!.length,
-                                      //   itemBuilder: (context,index){
-                                      //     getGenres(jsonString).map((e){
-                                      //       if(e.id.toString() == item.genreIds![index].toString()){
-                                      //         return Container(
-                                      //           padding: const EdgeInsets.all(10),
-                                      //           decoration: BoxDecoration(
-                                      //             borderRadius: BorderRadius.circular(16),
-                                      //             color: Colors.blueGrey
-                                      //           ),
-                                      //           child: Center(child: Text(getGenres(jsonString)[index].name),),
-                                      //         );
-                                      //       }
-                                      //       else {
-                                      //         return Container();
-                                      //       }
-                                      //     });
-                                      //     return Container();
-                                      //   },
-                                      // )
-                                    ],
-                                  ),
-                                ))
-                              ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                } else {
-                  return  Center(child: Text("No Data Found",style: getPoppingMedium().copyWith(fontSize: 25)));
-                }
-              }),
+                          );
+                        },
+                      ),
+                    );
+                  }
+                  else {
+                    return  Center(child: Text("No Data Found",style: getPoppingMedium().copyWith(fontSize: 25)));
+                  }
+                },
+              ),
             )
           ],
         ),

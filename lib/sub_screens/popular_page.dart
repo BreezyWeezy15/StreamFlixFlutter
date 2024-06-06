@@ -60,7 +60,7 @@ class _PopularPageState extends State<PopularPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(item.title!,style: getPoppingBold().copyWith(fontSize: 25),),
+                            Text(item.title!,style: getPoppingBold().copyWith(fontSize: 25),maxLines: 2,),
                             Row(children: [
                               Image.asset("assets/images/rating.png",width: 25,height: 25,),
                               const SizedBox(width: 10,),
