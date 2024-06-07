@@ -31,6 +31,7 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() {
       selectedRadio = StorageHelper.getCode();
       isToggled = StorageHelper.getMode() == "Light" ? false : true;
+      mode = StorageHelper.getMode() == "Light" ? "Light" : "Dark";
     });
   }
   @override
@@ -47,7 +48,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     GestureDetector(
                       onTap: (){
                         movieController.getMovies("now_playing", StorageHelper.getISO(), 1);
-                        Get.back();
+                        Get.offNamed("/home");
                       },
                       child: Image.asset("assets/images/arrow.png",height: 20,width: 20,
                         color: StorageHelper.getMode() == "Light" ? Colors.black54 : Colors.white,),

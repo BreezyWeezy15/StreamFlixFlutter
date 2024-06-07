@@ -1,8 +1,4 @@
-
-
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:movie_app/ui/details_page.dart';
 import 'package:movie_app/ui/fav_screen.dart';

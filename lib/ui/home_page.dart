@@ -84,8 +84,7 @@ class _HomePageState extends State<HomePage> {
                        Get.toNamed("/settings");
                      },
                      child: Image.asset("assets/images/settings.png",width: 20,height: 20,
-                       color: StorageHelper.getMode() == "Light" ? Colors.black54 : Colors.white
-                       ,),
+                     color : StorageHelper.getMode() == "Light" ? Colors.black54 : Colors.white,),
                    )
                  ],
                ),
