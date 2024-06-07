@@ -11,20 +11,24 @@ import 'models/genre_model.dart';
 class Utils {
    static const  String apiKey = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiYmZkYTMxMGI1MTdkYWVlZWM2MWUzNDkzYWI1ZWZkOCIsInN1YiI6IjVkMzA5NmVjNTExZDA5MGY0YjU3OTQ4YyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.x1NIb12Qei1ok47xYiLE2syJmXuvoicqgKbFrQrSMZ4";
    static const String apiUrl = "https://api.themoviedb.org/3/movie/";
-
    static String getRating(String rating) {
      if (rating.contains(".")) {
        return "${rating.substring(0,rating.indexOf("."))}/10 IMDb";
      }
      return rating;
    }
+   static const String splashRoute = "/splash";
+   static const String homeRoute = "/home";
+   static const String detailsRoute = "/details";
+   static const String settingsRoute = "/settings";
+   static const String favRoute = "/fav";
 }
 List<GetPage> getPages = [
-  GetPage(name: "/splash", page: () => const SplashPage()),
-  GetPage(name: "/home", page: () => const HomePage()),
-  GetPage(name: "/details", page: () => const DetailsPage()),
-  GetPage(name: "/settings", page: () => const SettingsPage()),
-  GetPage(name: "/fav", page: () => const FavPage())
+  GetPage(name: Utils.splashRoute, page: () => const SplashPage()),
+  GetPage(name: Utils.homeRoute, page: () => const HomePage()),
+  GetPage(name: Utils.detailsRoute, page: () => const DetailsPage()),
+  GetPage(name: Utils.settingsRoute, page: () => const SettingsPage()),
+  GetPage(name: Utils.favRoute, page: () => const FavPage())
 ];
 
 const String jsonString = '''

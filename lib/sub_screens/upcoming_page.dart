@@ -45,14 +45,18 @@ class _UpcomingPageState extends State<UpcomingPage> {
                 padding: const EdgeInsets.all(10),
                 child: GestureDetector(
                   onTap: (){
-                    Get.toNamed("/details",arguments: item);
+                    Get.toNamed(Utils.detailsRoute,arguments: item?.id);
                   },
                   child: Row(
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(16),
-                        child: Image.network("http://image.tmdb.org/t/p/w500/${item.backdropPath!}",width: 120,height: 120,
-                          fit: BoxFit.cover,filterQuality: FilterQuality.high,),
+                        child: item?.posterPath != null ?
+                        Image.network("http://image.tmdb.org/t/p/w500/${item?.backdropPath}",width: 120,height: 120,
+                          fit: BoxFit.cover,filterQuality: FilterQuality.high,) :
+                        Image.asset("assets/images/no_image.png",width: 120,height: 120,
+                          fit: BoxFit.cover,filterQuality: FilterQuality.high,color: StorageHelper.getMode()
+                              == "Light" ? Colors.black54 : Colors.white,),
                       ),
                       Expanded(child: Padding(
                         padding: const EdgeInsets.all(15),
@@ -60,12 +64,34 @@ class _UpcomingPageState extends State<UpcomingPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(item.title!,style: getPoppingBold().copyWith(fontSize: 25),maxLines: 2,),
+                            Text(item?.title != null ? item!.title! : "N/A",style: getPoppingBold().copyWith(fontSize: 20),maxLines: 2,),
+                            const SizedBox(height: 10,),
                             Row(children: [
-                              Image.asset("assets/images/rating.png",width: 25,height: 25,),
+                              Image.asset("assets/images/rating.png",width: 20,height: 20,),
                               const SizedBox(width: 10,),
-                              Text(Utils.getRating(item.voteAverage.toString()))
-                            ],)
+                              Text(Utils.getRating(item?.voteAverage != null ? item!.voteAverage.toString() : "0.0"))
+                            ],),
+                            // ListView.builder(
+                            //   itemCount: item.genreIds!.length,
+                            //   itemBuilder: (context,index){
+                            //     getGenres(jsonString).map((e){
+                            //       if(e.id.toString() == item.genreIds![index].toString()){
+                            //         return Container(
+                            //           padding: const EdgeInsets.all(10),
+                            //           decoration: BoxDecoration(
+                            //             borderRadius: BorderRadius.circular(16),
+                            //             color: Colors.blueGrey
+                            //           ),
+                            //           child: Center(child: Text(getGenres(jsonString)[index].name),),
+                            //         );
+                            //       }
+                            //       else {
+                            //         return Container();
+                            //       }
+                            //     });
+                            //     return Container();
+                            //   },
+                            // )
                           ],
                         ),
                       ))

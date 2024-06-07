@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                    Expanded(child: Text("Stream Flix",style: getPoppingBold().copyWith(fontSize: 20))),
                    GestureDetector(
                      onTap: (){
-                       Get.toNamed("/fav");
+                       Get.toNamed(Utils.favRoute);
                      },
                      child: Image.asset("assets/images/bookmark_filled.png",width: 20,height: 20,
                        color: StorageHelper.getMode() == "Light" ? Colors.black54 : Colors.white,),
@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                    const SizedBox(width: 15,),
                    GestureDetector(
                      onTap: (){
-                       Get.toNamed("/settings");
+                       Get.toNamed(Utils.settingsRoute);
                      },
                      child: Image.asset("assets/images/settings.png",width: 20,height: 20,
                      color : StorageHelper.getMode() == "Light" ? Colors.black54 : Colors.white,),
@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                           width: 150,
                           child: GestureDetector(
                             onTap: (){
-                              Get.toNamed("/details",arguments: e);
+                              Get.toNamed(Utils.detailsRoute,arguments: e.id);
                             },
                             child: Card(
                               margin: const EdgeInsets.all(5),

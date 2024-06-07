@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:movie_app/business/database_controller.dart';
 import 'package:movie_app/fonts.dart';
 import 'package:movie_app/storage/storage_helper.dart';
+import 'package:movie_app/utils.dart';
 
 class FavPage extends StatefulWidget {
   const FavPage({super.key});
@@ -31,6 +32,14 @@ class _FavPageState extends State<FavPage> {
               padding: const EdgeInsets.all(10),
               child: Row(
                 children: [
+                  GestureDetector(
+                    onTap: (){
+                      Get.back();
+                    },
+                    child:  Image.asset("assets/images/arrow.png",height: 20,width: 20,
+                      color: StorageHelper.getMode() == "Light" ? Colors.black54 : Colors.white,),
+                  ),
+                  const SizedBox(width: 10,),
                   Expanded(child: Text("Fav Movies",style: getPoppingBold().copyWith(fontSize: 20),)),
                   const SizedBox(width: 10,),
                   GestureDetector(
@@ -78,7 +87,7 @@ class _FavPageState extends State<FavPage> {
                           padding: const EdgeInsets.all(10),
                           child: GestureDetector(
                             onTap: (){
-                              //Get.toNamed("/details",arguments: e);
+                              Get.toNamed(Utils.detailsRoute,arguments: e[index]?.id);
                             },
                             child: Dismissible(
                               key: Key(UniqueKey().toString()),
