@@ -136,8 +136,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           isToggled = value;
                           if(isToggled){
                              mode = "Dark";
-                          }
-                          else {
+                             Get.changeThemeMode(ThemeMode.dark);
+                          } else {
+                             Get.changeThemeMode(ThemeMode.light);
                              mode = "Light";
                           }
                           StorageHelper.setMode(mode);

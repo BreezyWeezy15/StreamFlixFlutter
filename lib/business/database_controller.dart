@@ -1,23 +1,19 @@
-
-
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:movie_app/main.dart';
-
 import '../database/movie_database.dart';
 
 class DatabaseController extends GetxController {
-   var data = Rx<List<MovieHelperData?>>([]);
+   RxList<MovieHelperData?> data = RxList([]);
    var error = "".obs;
 
    Future<int> saveMovie(MovieHelperCompanion movieHelperCompanion) async {
        return await databaseService.saveMovie(movieHelperCompanion);
    }
    void getAllMovies() {
+     data.clear();
      databaseService.getAllMovies().then((value){
        if(value.isNotEmpty){
           data.value = value;
-          update();
        }
      });
    }

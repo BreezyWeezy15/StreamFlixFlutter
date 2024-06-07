@@ -6,7 +6,7 @@ import '../database/movie_database.dart';
 
 class DatabaseService {
 
-  Future<List<MovieHelperData>> getAllMovies() async {
+  Future<List<MovieHelperData?>> getAllMovies() async {
     return await database.getAllMovies();
   }
 

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:movie_app/auth/database_service.dart';
 import 'package:movie_app/database/movie_database.dart';
+import 'package:movie_app/storage/storage_helper.dart';
 import 'package:movie_app/ui/splash_page.dart';
 import 'package:movie_app/utils.dart';
 import 'business/theme_controller.dart';
@@ -15,7 +16,9 @@ void main() async {
   runApp(GetMaterialApp(
     home: const MyApp(),
     debugShowCheckedModeBanner: false,
-    theme: themeController.theme,
+    theme: ThemeData.light(),
+    darkTheme: ThemeData.dark(),
+    themeMode: StorageHelper.getMode() == "Light" ? ThemeMode.light : ThemeMode.dark,
     getPages: getPages,
   ));
 }

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:drift/drift.dart' as d;
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/get_instance.dart';
-import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:movie_app/business/database_controller.dart';
 import 'package:movie_app/business/movie_controller.dart';
 import 'package:movie_app/database/movie_database.dart';
@@ -22,6 +20,7 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  var isAdded = false;
   late Results results;
   var iconPath = "assets/images/bookmark_unfilled.png";
   late DatabaseController databaseController;
@@ -33,24 +32,30 @@ class _DetailsPageState extends State<DetailsPage> {
     movieController = Get.find<MovieController>();
     databaseController = Get.find<DatabaseController>();
     results = Get.arguments;
-    ever(databaseController.data, (value) {
-      for (var element in value) {
-        if (results.id == element?.id.toInt()) {
-          if (mounted) {
-            setState(() {
-              iconPath = "assets/images/bookmark_filled.png";
-            });
-          }
-        }
-      }
-        });
+    isMovieAdded();
+    movieController.getMovieDetails(results.id.toString(), StorageHelper.getISO());
+    movieController.getMovieCast(results.id.toString(), StorageHelper.getISO());
+
+  }
+
+  void isMovieAdded() {
+     for (var element in databaseController.data) {
+       print("CALL BLOCK 1");
+       if (results.id == element?.id.toInt()) {
+         print("CALL BLOCK 2");
+         if (mounted) {
+           print("CALL BLOCK 3");
+           setState(() {
+             iconPath = "assets/images/bookmark_filled.png";
+             isAdded = true;
+           });
+         }
+       }
+     }
   }
 
   @override
   Widget build(BuildContext context) {
-
-    movieController.getMovieDetails(results.id.toString(), "en-US");
-    movieController.getMovieCast(results.id.toString(), "en-US");
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -85,20 +90,40 @@ class _DetailsPageState extends State<DetailsPage> {
                     const SizedBox(width: 20,),
                     GestureDetector(
                       onTap: () async {
-                        MovieHelperCompanion data = MovieHelperCompanion(
-                          id: d.Value(results.id!.toInt()),
-                          title: d.Value(results.title),
-                          postPath: d.Value(results.posterPath),
-                          releaseDate: d.Value(results.releaseDate),
-                          rating: d.Value(Utils.getRating(results.voteAverage.toString())),
-                          movieID: d.Value(results.id.toString())
-                        );
-                        var result = await database.saveMovie(data);
-                        if(result != -1){
-                          Fluttertoast.showToast(msg: "Movie Successfully Added To Favs");
-                          setState(() {
-                            iconPath = "assets/images/bookmark_filled.png";
-                          });
+                        if(isAdded){
+                           try {
+                             await databaseController.deleteMovie(results.id!);
+                             Fluttertoast.showToast(msg: "Movie Successfully Removed From Favs");
+                             setState(() {
+                               isAdded = false;
+                               iconPath = "assets/images/bookmark_unfilled.png";
+                             });
+                           } catch(e){
+                             print("Erro deleting movie");
+                           }
+
+                        }
+                        else {
+                         try {
+                           MovieHelperCompanion data = MovieHelperCompanion(
+                               id: d.Value(results.id!.toInt()),
+                               title: d.Value(results.title),
+                               postPath: d.Value(results.posterPath),
+                               releaseDate: d.Value(results.releaseDate),
+                               rating: d.Value(Utils.getRating(results.voteAverage.toString())),
+                               movieID: d.Value(results.id.toString())
+                           );
+                           var result = await database.saveMovie(data);
+                           if(result != -1){
+                             Fluttertoast.showToast(msg: "Movie Successfully Added To Favs");
+                             setState(() {
+                               isAdded = true;
+                               iconPath = "assets/images/bookmark_filled.png";
+                             });
+                           }
+                         } catch(e){
+                            print("error adding value $e");
+                         }
                         }
                       },
                       child: Image.asset(iconPath,width: 25,height: 25,
